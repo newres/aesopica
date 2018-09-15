@@ -64,52 +64,42 @@
   (let [kg fox-and-stork-edn]
     (is (s/valid? ::aes/knowledge-graph kg))))
 
-
 (deftest contextualize-base-test
-  (let [
-        context {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+  (let [context {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         kw :fox]
-    (is (= "http://www.newresalhaider.com/ontologies/aesop/foxstork/fox" (contextualize context kw)))
-    )
-  )
+    (is (= "http://www.newresalhaider.com/ontologies/aesop/foxstork/fox" (contextualize context kw)))))
 
 (deftest contextualize-keyword-test
-  (let [
-        context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         kw :foxstork/fox]
-    (is (= "http://www.newresalhaider.com/ontologies/aesop/foxstork/fox" (contextualize context kw)))
-    )
-  )
+    (is (= "http://www.newresalhaider.com/ontologies/aesop/foxstork/fox" (contextualize context kw)))))
 
 (deftest convert-to-resource-test
-  (let [
-        context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         kw :foxstork/fox]
     (is (=
 
          (str (contextualize context kw))
-         (.getURI (convert-to-resource context kw))))
-    )
-  )
+         (.getURI (convert-to-resource context kw))))))
 
 (deftest convert-to-statement-test
-  (let [
-        context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
-        triple [:foxstork/fox :foxstork/gives-invitation :foxstork/invitation1]
-]
-    (is (= (str "[" (clojure.string/join ", " (map contextualize (repeat context) triple)) "]") (.toString (convert-to-statement context triple))))
-    )
-  )
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        triple [:foxstork/fox :foxstork/gives-invitation :foxstork/invitation1]]
+    (is (= (str "[" (clojure.string/join ", " (map contextualize (repeat context) triple)) "]") (.toString (convert-to-statement context triple))))))
 
-;; (deftest convert-to-statement-no-context-test
-;;   (let [fact [:fox :gives-invitation :invitation1]]
-;;     (println (convert-to-statement nil fact))
-;;     )
-;;   )
+(deftest convert-to-model-empty-test
+  (is (= [] (. (.  (convert-to-model {}) listStatements) toList))))
+
+(deftest convert-to-model-fox-and-stork-test
+  (is (= 14 (count (. (.  (convert-to-model fox-and-stork-edn) listStatements) toList)))))
 
 (deftest edn-to-turtle-empty-translate-test
-  (is (= "" (convert-to-rdf {}))))
+  (let [converted-model (convert-to-model {})]
+    (is (= 0 (.size converted-model)))
+    (is (= "" (model-write converted-model)))))
 
-;; (deftest edn-to-turtle-translate-test
-;;   (testing "Wheter an EDN representation can be correctly translated to RDF.")
-;;   (is (= fox-and-stork-rdf (convert-to-rdf fox-and-stork-edn))))
+(deftest edn-to-turtle-translate-test
+  (testing "Wheter an EDN representation can be correctly translated to RDF.")
+  (let [converted-model (convert-to-model fox-and-stork-edn)]
+    (is (= 14 (.size converted-model)))
+    (is (string? (model-write (convert-to-model fox-and-stork-edn))))))

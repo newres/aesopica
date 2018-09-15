@@ -4,6 +4,6 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.apache.jena/jena-core "3.8.0"]
+                 [org.apache.jena/apache-jena-libs "3.8.0" :extension "pom"]
                  ;; [org.apache.jena/jena-iri "3.8.0"]
                  ])

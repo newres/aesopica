@@ -1,7 +1,10 @@
 (ns aesopica.core
   (:import
+   (org.apache.jena.riot Lang)
+   (org.apache.jena.riot RDFDataMgr)
    (org.apache.jena.rdf.model)
    (org.apache.jena.rdf.model ResourceFactory)
+   (org.apache.jena.rdf.model ModelFactory)
    (org.apache.jena.rdf.model Statement)
    (org.apache.jena.rdf.model.impl StatementImpl))
   (:require [clojure.spec.alpha :as s]))
@@ -33,39 +36,19 @@
         object-resource (convert-to-resource context (nth triple 2))]
     (ResourceFactory/createStatement subject-resource predicate-property object-resource)))
 
-;; (defn create-statement [sub pre obj]
-;;   (new StatementImpl sub pre obj ))
-
-
-;; (defn iri?
-;;   "Checks whether the given value is an IRI."
-;;   [x]
-;;   (.)(.create IRIFactory)
-;;   )
-
-(defn convert-to-rdf
+(defn convert-to-model
   "Takes and EDN representation of a knowledge graph and coverts it to rdf."
   [edn]
-  (if (= {} edn) ""
-      "@base <http://www.newresalhaider.com/ontologies/aesop/foxstork> .
-  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+  (let [facts (::facts edn)
+        context (::context edn)
+        statements (map convert-to-statement (repeat context) facts)]
+    (. (ModelFactory/createDefaultModel) add statements)))
 
-  <#fox> a <#animal>.
-  <#stork> a <#animal>.
-  <#fox> <#gives-invitation> <#invitation1>.
-  <#invitation1> <#has-invited> <#stork>.
-  <#invitation1> <#has-food> <#soup>.
-  <#invitation1> <#serves-using> <#shallow-plate>.
-  <#stork> <#gives-invitation> <#invitation2>.
-  <#invitation2> <#has-invited> <#fox>.
-  <#invitation2> <#has-food> <#crumbled-food>.
-  <#invitation2> <#serves-using> <#narrow-mouthed-jug>.
-  <#fox> <#can-eat-food-served-using> <#shallow-plate>.
-  <#fox> <#can-not-eat-food-served-using> <#narrow-mouthed-jug>.
-  <#stork> <#can-eat-food-served-using> <#narrow-mouthed-jug>.
-  <#stork> <#can-not-eat-food-served-using> <#shallow-plate>."))
+(defn model-write
+  "Writes the model to a string."
+  [model]
+  (let [syntax (Lang/TURTLE)
+        out (java.io.StringWriter.)]
+    (RDFDataMgr/write out model syntax)
+    (.toString out)))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
