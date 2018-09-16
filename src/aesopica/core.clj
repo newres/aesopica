@@ -14,10 +14,6 @@
 (s/def ::facts (s/coll-of ::triple :kind set?))
 (s/def ::knowledge-graph (s/keys :req [::context ::facts]))
 
-(defn keyword-to-iri
-  [keyword]
-  (str keyword))
-
 (defn contextualize [context kw]
   (let [ns (namespace kw)
         prefix (if (= ns "") (get context nil)
