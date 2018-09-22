@@ -48,6 +48,32 @@
      [:stork :can-eat-food-served-using :narrow-mouthed-jug]
      [:stork :can-not-eat-food-served-suing :shallow-plate]}})
 
+(def fox-and-stork-description-rdf
+  "@base <http://www.newresalhaider.com/ontologies/aesop/foxstork> .
+  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+  @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+  <#fox> rdf:type <#animal>.
+  <#fox> foaf:name \"vo\".
+  <#fox> foaf:age 2.
+  <#stork> rdf:type <#animal>.
+  <#stork> foaf:name \"ooi\".
+  <#stork> foaf:age 13.
+  ")
+
+(def fox-and-stork-literals-edn
+  {::aes/context
+   {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
+    :rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    :foaf "http://xmlns.com/foaf/0.1/"}
+   ::aes/facts
+   #{[:fox :rdf/type :animal]
+     [:fox :foaf/name "vo"]
+     [:fox :foaf/age 2]
+     [:stork :rdf/type :animal]
+     [:stork :foaf/name "ooi"]
+     [:stork :foaf/age 13]}})
+
 (deftest valid-empty-context-test
   (let [context {}]
     (is (s/valid? ::aes/context context))))
@@ -62,6 +88,18 @@
 
 (deftest valid-kb-fox-stork-test
   (let [kg fox-and-stork-edn]
+    (is (s/valid? ::aes/knowledge-graph kg))))
+
+(deftest valid-context-fox-stork-literals-test
+  (let [context (::aes/context fox-and-stork-literals-edn)]
+    (is (s/valid? ::aes/context context))))
+
+(deftest valid-kb-fox-stork-literals-test
+  (let [facts (::aes/facts fox-and-stork-literals-edn)]
+    (is (s/valid? ::aes/facts facts))))
+
+(deftest valid-kb-fox-stork-test
+  (let [kg fox-and-stork-literals-edn]
     (is (s/valid? ::aes/knowledge-graph kg))))
 
 (deftest contextualize-base-test
@@ -82,10 +120,47 @@
          (str (contextualize context kw))
          (.getURI (convert-to-resource context kw))))))
 
+(deftest convert-to-literal-string-test
+  (let [string "a string"
+        literal (convert-to-literal string)
+        datatype-uri "http://www.w3.org/2001/XMLSchema#string"]
+    (is (= string (.getString literal)))
+    (is (= datatype-uri (.getDatatypeURI literal))
+        )))
+
+(deftest convert-to-literal-long-test
+  (let [long 3
+        literal (convert-to-literal long)
+        datatype-uri "http://www.w3.org/2001/XMLSchema#long"]
+    (is (= (str long) (.getString literal)))
+    (is (= datatype-uri (.getDatatypeURI literal))
+        )))
+
+(deftest convert-to-literal-boolean-test
+  (let [boolean true
+        literal (convert-to-literal boolean)
+        datatype-uri "http://www.w3.org/2001/XMLSchema#boolean"]
+    (is (= (str boolean) (.getString literal)))
+    (is (= datatype-uri (.getDatatypeURI literal))
+        )))
+
+(deftest convert-to-object-test
+  (let [element "test"
+        context {}
+        ]
+    (is (= element (.getString (convert-to-object context element))))
+        ))
+
 (deftest convert-to-statement-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         triple [:foxstork/fox :foxstork/gives-invitation :foxstork/invitation1]]
     (is (= (str "[" (clojure.string/join ", " (map contextualize (repeat context) triple)) "]") (.toString (convert-to-statement context triple))))))
+
+
+(deftest convert-to-statement-literal-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        triple [:foxstork/fox :foxstork/name "2"]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/name, \"2\"]" (.toString (convert-to-statement context triple))))))
 
 (deftest convert-to-model-empty-test
   (is (= [] (. (.  (convert-to-model {}) listStatements) toList))))
