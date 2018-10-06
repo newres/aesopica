@@ -156,17 +156,29 @@
         triple [:foxstork/fox :foxstork/gives-invitation :foxstork/invitation1]]
     (is (= (str "[" (clojure.string/join ", " (map contextualize (repeat context) triple)) "]") (.toString (convert-to-statement context triple))))))
 
-
-(deftest convert-to-statement-literal-test
+(deftest convert-to-statement-literal-long-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
-        triple [:foxstork/fox :foxstork/name "2"]]
-    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/name, \"2\"]" (.toString (convert-to-statement context triple))))))
+        triple [:foxstork/fox :foxstork/age 6]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/age, \"6\"^^http://www.w3.org/2001/XMLSchema#long]" (.toString (convert-to-statement context triple))))))
+
+(deftest convert-to-statement-literal-string-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        triple [:foxstork/fox :foxstork/name "Mr. Fox"]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/name, \"Mr. Fox\"]" (.toString (convert-to-statement context triple))))))
+
+(deftest convert-to-statement-literal-boolean-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        triple [:foxstork/fox :foxstork/isCunning true]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/isCunning, \"true\"^^http://www.w3.org/2001/XMLSchema#boolean]" (.toString (convert-to-statement context triple))))))
 
 (deftest convert-to-model-empty-test
   (is (= [] (. (.  (convert-to-model {}) listStatements) toList))))
 
 (deftest convert-to-model-fox-and-stork-test
   (is (= 14 (count (. (.  (convert-to-model fox-and-stork-edn) listStatements) toList)))))
+
+(deftest convert-to-model-fox-and-stork-literals-test
+  (is (= 6 (count (. (.  (convert-to-model fox-and-stork-literals-edn) listStatements) toList)))))
 
 (deftest edn-to-turtle-empty-translate-test
   (let [converted-model (convert-to-model {})]
