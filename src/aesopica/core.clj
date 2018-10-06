@@ -43,7 +43,7 @@
   (let [subject-resource (convert-to-resource context (nth triple 0))
         predicate-property (convert-to-property context (nth triple 1))
         object-resource (convert-to-object context (nth triple 2))]
-    (println (type object-resource))
+    ;; (println (type object-resource))
     (ResourceFactory/createStatement subject-resource predicate-property object-resource)))
 
 (defn convert-to-model
