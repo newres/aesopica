@@ -66,7 +66,7 @@
    {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
     :rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     :foaf "http://xmlns.com/foaf/0.1/"
-    ;; :xsd "http://www.w3.org/2001/XMLSchema#"
+    :xsd "http://www.w3.org/2001/XMLSchema#"
     }
    ::aes/facts
    #{[:fox :rdf/type :animal]
@@ -78,7 +78,7 @@
      [:stork :foaf/name "ooi"]
      [:stork :foaf/age 13]
      [:stork :is-cunning true]
-     ;; [:dinner1 :has-date {:value "2002-05-30T09:00:00" :type :xsd/dateTime}]
+     [:dinner1 :has-date {:value "2002-05-30T09:00:00" :type :xsd/dateTime}]
      }})
 
 (deftest valid-empty-context-test
@@ -197,7 +197,7 @@
   (is (= 14 (count (. (.  (convert-to-model fox-and-stork-edn) listStatements) toList)))))
 
 (deftest convert-to-model-fox-and-stork-literals-test
-  (is (= 9 (count (. (.  (convert-to-model fox-and-stork-literals-edn) listStatements) toList)))))
+  (is (= 10 (count (. (.  (convert-to-model fox-and-stork-literals-edn) listStatements) toList)))))
 
 (deftest edn-to-turtle-empty-translate-test
   (let [converted-model (convert-to-model {})]
