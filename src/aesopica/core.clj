@@ -6,7 +6,9 @@
    (org.apache.jena.rdf.model ResourceFactory)
    (org.apache.jena.rdf.model ModelFactory)
    (org.apache.jena.rdf.model Statement)
-   (org.apache.jena.rdf.model.impl StatementImpl))
+   (org.apache.jena.rdf.model.impl StatementImpl)
+   (org.apache.jena.datatypes BaseDatatype)
+   )
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::context (s/map-of (s/or :keyword keyword? :nil nil?) string?))
@@ -21,9 +23,18 @@
                    (get context (keyword ns)))]
     (str prefix (name kw))))
 
-(defn convert-to-literal [literal]
+(defmulti convert-to-literal (fn [context literal] (cond (map? literal) :custom-type :else :default )))
+
+(defmethod convert-to-literal :custom-type [context literal-map]
+  (ResourceFactory/createTypedLiteral (:value literal-map) (new BaseDatatype (contextualize context (:type literal-map))))
+  )
+
+(defmethod convert-to-literal :default [context literal]
   (ResourceFactory/createTypedLiteral literal)
   )
+;; (defn convert-to-literal [literal]
+;;   (ResourceFactory/createTypedLiteral literal)
+;;   )
 
 (defn convert-to-resource [context kw]
   (ResourceFactory/createResource (contextualize context kw)))
@@ -34,7 +45,7 @@
 (defn convert-to-object [context element]
   (if (keyword? element)
     (convert-to-resource context element)
-    (convert-to-literal element)
+    (convert-to-literal context element)
     )
   )
 

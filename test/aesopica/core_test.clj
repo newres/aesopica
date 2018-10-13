@@ -73,6 +73,7 @@
      [:fox :foaf/name "vo"]
      [:fox :foaf/age 2]
      [:fox :is-cunning true]
+     [:fox :has-weight 6.8]
      [:stork :rdf/type :animal]
      [:stork :foaf/name "ooi"]
      [:stork :foaf/age 13]
@@ -128,7 +129,7 @@
 
 (deftest convert-to-literal-string-test
   (let [string "a string"
-        literal (convert-to-literal string)
+        literal (convert-to-literal {} string)
         datatype-uri "http://www.w3.org/2001/XMLSchema#string"]
     (is (= string (.getString literal)))
     (is (= datatype-uri (.getDatatypeURI literal))
@@ -136,7 +137,7 @@
 
 (deftest convert-to-literal-long-test
   (let [long 3
-        literal (convert-to-literal long)
+        literal (convert-to-literal {} long)
         datatype-uri "http://www.w3.org/2001/XMLSchema#long"]
     (is (= (str long) (.getString literal)))
     (is (= datatype-uri (.getDatatypeURI literal))
@@ -144,7 +145,7 @@
 
 (deftest convert-to-literal-boolean-test
   (let [boolean true
-        literal (convert-to-literal boolean)
+        literal (convert-to-literal {} boolean)
         datatype-uri "http://www.w3.org/2001/XMLSchema#boolean"]
     (is (= (str boolean) (.getString literal)))
     (is (= datatype-uri (.getDatatypeURI literal))
@@ -167,6 +168,11 @@
         triple [:foxstork/fox :foxstork/age 6]]
     (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/age, \"6\"^^http://www.w3.org/2001/XMLSchema#long]" (.toString (convert-to-statement context triple))))))
 
+(deftest convert-to-statement-literal-double-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        triple [:foxstork/fox :foxstork/weight-in-kg 8.3]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/weight-in-kg, \"8.3\"^^http://www.w3.org/2001/XMLSchema#double]" (.toString (convert-to-statement context triple))))))
+
 (deftest convert-to-statement-literal-string-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         triple [:foxstork/fox :foxstork/name "Mr. Fox"]]
@@ -177,6 +183,13 @@
         triple [:foxstork/fox :foxstork/isCunning true]]
     (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/fox, http://www.newresalhaider.com/ontologies/aesop/foxstork/isCunning, \"true\"^^http://www.w3.org/2001/XMLSchema#boolean]" (.toString (convert-to-statement context triple))))))
 
+
+(deftest convert-to-statement-custom-datatype-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
+                 :xsd "http://www.w3.org/2001/XMLSchema#"}
+        triple [:foxstork/dinner :foxstork/planned-on-date {:value "2002-09-24" :type :xsd/date }]]
+    (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner, http://www.newresalhaider.com/ontologies/aesop/foxstork/planned-on-date, \"2002-09-24\"^^http://www.w3.org/2001/XMLSchema#date]" (.toString (convert-to-statement context triple))))))
+
 (deftest convert-to-model-empty-test
   (is (= [] (. (.  (convert-to-model {}) listStatements) toList))))
 
@@ -184,7 +197,7 @@
   (is (= 14 (count (. (.  (convert-to-model fox-and-stork-edn) listStatements) toList)))))
 
 (deftest convert-to-model-fox-and-stork-literals-test
-  (is (= 8 (count (. (.  (convert-to-model fox-and-stork-literals-edn) listStatements) toList)))))
+  (is (= 9 (count (. (.  (convert-to-model fox-and-stork-literals-edn) listStatements) toList)))))
 
 (deftest edn-to-turtle-empty-translate-test
   (let [converted-model (convert-to-model {})]
