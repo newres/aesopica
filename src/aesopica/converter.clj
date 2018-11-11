@@ -17,10 +17,6 @@
    [aesopica.core :as core]
    [clojure.spec.alpha :as s]))
 
-(s/def graph (s/or :uri string? :nil nil))
-(s/def statement #(instance? Statement %))
-(s/def graph-statement (s/cat :graph ::graph :statement ::statement))
-
 (defmulti convert-to-literal (fn [context literal] (cond (map? literal) :custom-type :else :default)))
 
 (defmethod convert-to-literal :custom-type [context literal-map]
