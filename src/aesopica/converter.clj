@@ -17,8 +17,9 @@
    [aesopica.core :as core]
    [clojure.spec.alpha :as s]))
 
+(s/def ::triple-lang #{Lang/JSONLD Lang/TURTLE Lang/RDFXML})
 (s/def ::quad-lang #{Lang/NQUADS Lang/TRIG})
-(s/def ::lang #{Lang/JSONLD Lang/TURTLE Lang/RDFXML Lang/NQUADS Lang/TRIG})
+(s/def ::lang (s/or ::triple-land ::triple-lang ::quad-lang ::quad-lang))
 
 (defmulti convert-to-literal (fn [context literal] (cond (map? literal) :custom-type :else :default)))
 
@@ -69,7 +70,7 @@
         (.add dataset-graph quad))
       dataset-graph)))
 
-(defn write-dataset-graph-as
+(defn write-dataset-graph
   "Write a dataset graph in the specified language as a string."
   [writable lang]
   (let [syntax lang
@@ -77,17 +78,17 @@
     (RDFDataMgr/write out writable syntax)
     (.toString out)))
 
-(defn write-dataset-graph
+(defn write-dataset-graph-turtle
   "Writes a dataset-graph to a TURTLE string."
   [writable]
-  (write-dataset-graph-as writable Lang/TURTLE))
+  (write-dataset-graph writable Lang/TURTLE))
 
-(defn write-dataset-graph-quad
+(defn write-dataset-graph-nquads
   "Writes a dataset-graph to an NQUADS string."
   [writable]
-  (write-dataset-graph-as writable Lang/NQUADS))
+  (write-dataset-graph writable Lang/NQUADS))
 
-(defn read-dataset-graph-as
+(defn read-dataset-graph
   "Reads a dataset from a given format string."
   [dataset-string format]
   (let [syntax format
@@ -96,14 +97,12 @@
     (.parse (.lang (.source (RDFParser/create) in) syntax) dataset-graph)
     dataset-graph))
 
-(defn read-dataset-graph
+(defn read-dataset-graph-turtle
   "Reads a dataset from a TURTLE format string."
   [dataset-string]
-  (read-dataset-graph-as dataset-string Lang/TURTLE)
-  )
+  (read-dataset-graph dataset-string Lang/TURTLE))
 
-(defn read-dataset-graph-quad
+(defn read-dataset-graph-nquads
   "Reads a dataset from an NQUADS format string."
   [dataset-string]
-  (read-dataset-graph-as dataset-string Lang/NQUADS)
-)
+  (read-dataset-graph dataset-string Lang/NQUADS))

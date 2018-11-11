@@ -11,6 +11,7 @@
 (s/def ::knowledge-graph (s/keys :req [::context ::facts]))
 
 (defn contextualize [context kw]
+  "Given a context and a keyword, it creates a namespaced version of the keyword that is appropriate given the context."
   (let [ns (namespace kw)
         prefix (if (= ns "") (get context nil)
                    (get context (keyword ns)))]

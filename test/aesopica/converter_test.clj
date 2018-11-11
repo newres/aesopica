@@ -96,14 +96,14 @@
   (is (= 14 (count (iterator-seq (.find (convert-to-dataset-graph fox-and-stork-edn)))))))
 
 (defn diff [dataset-graph1 dataset-graph2]
-  (let [dataset-graph1-set (set (clojure.string/split (write-dataset-graph-quad dataset-graph1) #"\n"))
-        dataset-graph2-set (set (clojure.string/split (write-dataset-graph-quad dataset-graph2) #"\n"))
+  (let [dataset-graph1-set (set (clojure.string/split (write-dataset-graph-nquads dataset-graph1) #"\n"))
+        dataset-graph2-set (set (clojure.string/split (write-dataset-graph-nquads dataset-graph2) #"\n"))
         diff (clojure.data/diff dataset-graph1-set dataset-graph2-set)]
     diff))
 
 (deftest convert-to-dataset-graph-fox-and-stork-comparison-test
   (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-edn)
-        dataset-graph2 (read-dataset-graph fox-and-stork-rdf)
+        dataset-graph2 (read-dataset-graph-turtle fox-and-stork-rdf)
         diff-result (diff dataset-graph1 dataset-graph2)]
     (is (= nil (first diff-result)))
     (is (= nil (second diff-result)))
@@ -114,7 +114,7 @@
 
 (deftest convert-to-dataset-graph-fox-and-stork-literals-comparison-test
   (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-literals-edn)
-        dataset-graph2 (read-dataset-graph fox-and-stork-literals-rdf)
+        dataset-graph2 (read-dataset-graph-turtle fox-and-stork-literals-rdf)
         diff-result (diff dataset-graph1 dataset-graph2)]
     (is (= 3 (count (first diff-result))))
     (is (= 2 (count (second diff-result))))
@@ -125,7 +125,7 @@
 
 (deftest convert-to-dataset-graph-fox-and-stork-reif-comparison-test
   (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-reif-edn)
-        dataset-graph2 (read-dataset-graph-quad fox-and-stork-reif-nquad)
+        dataset-graph2 (read-dataset-graph-nquads fox-and-stork-reif-nquad)
         diff-result (diff dataset-graph1 dataset-graph2)]
     (is (= 0 (count (first diff-result))))
     (is (= 0 (count (second diff-result))))
@@ -134,10 +134,10 @@
 (deftest edn-to-turtle-empty-translate-test
   (let [converted-dataset-graph (convert-to-dataset-graph {})]
     (is (= 0 (count (iterator-seq (.find  converted-dataset-graph)))))
-    (is (= "" (write-dataset-graph-quad converted-dataset-graph)))))
+    (is (= "" (write-dataset-graph-nquads converted-dataset-graph)))))
 
 (deftest edn-to-turtle-translate-test
   (testing "Wheter an EDN representation can be correctly translated to RDF.")
   (let [converted-dataset-graph (convert-to-dataset-graph fox-and-stork-edn)]
     (is (= 14 (count (iterator-seq (.find  converted-dataset-graph)))))
-    (is (string? (write-dataset-graph-quad (convert-to-dataset-graph fox-and-stork-edn))))))
+    (is (string? (write-dataset-graph-nquads (convert-to-dataset-graph fox-and-stork-edn))))))
