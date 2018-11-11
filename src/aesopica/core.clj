@@ -5,7 +5,9 @@
 (s/def ::custom-literal (s/keys :req-un [::value ::type]))
 (s/def ::object (s/or :keyword keyword? :string string? :number number? :boolean boolean? :custom-literal ::custom-literal))
 (s/def ::triple (s/cat :subject keyword? :predicate keyword? :object ::object))
-(s/def ::facts (s/coll-of ::triple :kind set?))
+(s/def ::quad (s/cat :subject keyword? :predicate keyword? :object ::object :graph keyword?))
+(s/def ::fact (s/or :triple ::triple :quad ::quad))
+(s/def ::facts (s/coll-of ::fact :kind set?))
 (s/def ::knowledge-graph (s/keys :req [::context ::facts]))
 
 (defn contextualize [context kw]

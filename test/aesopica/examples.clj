@@ -40,11 +40,11 @@
      [:invitation1 :has-food :soup]
      [:invitation1 :serves-using :shallow-plate]
      [:stork :gives-invitation :invitation2]
-     [:invitation2 :has-invited :stork]
+     [:invitation2 :has-invited :fox]
      [:invitation2 :has-food :crumbled-food]
      [:invitation2 :serves-using :narrow-mouthed-jug]
      [:fox :can-eat-food-served-using :shallow-plate]
-     [:fox :can-not-eat-food-served-suing :narrow-mouthed-jug]
+     [:fox :can-not-eat-food-served-using :narrow-mouthed-jug]
      [:stork :can-eat-food-served-using :narrow-mouthed-jug]
      [:stork :can-not-eat-food-served-using :shallow-plate]}})
 
@@ -82,3 +82,41 @@
      [:stork :foaf/age 13]
      [:stork :is-cunning true]
      [:dinner1 :has-date {:value "2002-05-30T09:00:00" :type :xsd/dateTime}]}})
+
+
+(def fox-and-stork-reif-edn
+  {::aes/context
+   {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
+    :rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
+   ::aes/facts
+   #{[:fox :rdf/type :animal :dinner1]
+     [:stork :rdf/type :animal :dinner1]
+     [:fox :gives-invitation :invitation1 :dinner1]
+     [:invitation1 :has-invited :stork :dinner1]
+     [:invitation1 :has-food :soup :dinner1]
+     [:invitation1 :serves-using :shallow-plate :dinner1]
+     [:stork :gives-invitation :invitation2 :dinner2]
+     [:invitation2 :has-invited :fox :dinner2]
+     [:invitation2 :has-food :crumbled-food :dinner2]
+     [:invitation2 :serves-using :narrow-mouthed-jug :dinner2]
+     [:fox :can-eat-food-served-using :shallow-plate]
+     [:fox :can-not-eat-food-served-using :narrow-mouthed-jug]
+     [:stork :can-eat-food-served-using :narrow-mouthed-jug]
+     [:stork :can-not-eat-food-served-using :shallow-plate]}})
+
+(def fox-and-stork-reif-nquad
+
+"<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/can-eat-food-served-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/shallow-plate> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/can-not-eat-food-served-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/narrow-mouthed-jug> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/can-not-eat-food-served-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/shallow-plate> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/can-eat-food-served-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/narrow-mouthed-jug> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/serves-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/narrow-mouthed-jug> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/crumbled-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-invited> <http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation> <http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.newresalhaider.com/ontologies/aesop/foxstork/animal> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation> <http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.newresalhaider.com/ontologies/aesop/foxstork/animal> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/soup> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/serves-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/shallow-plate> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-invited> <http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .")

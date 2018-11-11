@@ -24,12 +24,20 @@
   (let [context (::aes/context fox-and-stork-literals-edn)]
     (is (s/valid? ::aes/context context))))
 
-(deftest valid-kb-fox-stork-literals-test
+(deftest valid-facts-fox-stork-literals-test
   (let [facts (::aes/facts fox-and-stork-literals-edn)]
     (is (s/valid? ::aes/facts facts))))
 
-(deftest valid-kb-fox-stork-test
+(deftest valid-kb-fox-stork-literals-test
   (let [kg fox-and-stork-literals-edn]
+    (is (s/valid? ::aes/knowledge-graph kg))))
+
+(deftest valid-facts-fox-stork-reif-test
+  (let [facts (::aes/facts fox-and-stork-reif-edn)]
+    (is (s/valid? ::aes/facts facts))))
+
+(deftest valid-kb-fox-stork-reif-test
+  (let [kg fox-and-stork-reif-edn]
     (is (s/valid? ::aes/knowledge-graph kg))))
 
 (deftest contextualize-base-test
