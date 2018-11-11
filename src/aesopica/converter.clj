@@ -17,6 +17,9 @@
    [aesopica.core :as core]
    [clojure.spec.alpha :as s]))
 
+(s/def ::quad-lang #{Lang/NQUADS Lang/TRIG})
+(s/def ::lang #{Lang/JSONLD Lang/TURTLE Lang/RDFXML Lang/NQUADS Lang/TRIG})
+
 (defmulti convert-to-literal (fn [context literal] (cond (map? literal) :custom-type :else :default)))
 
 (defmethod convert-to-literal :custom-type [context literal-map]
@@ -55,7 +58,8 @@
   (new Quad nil (.asTriple (convert-to-statement context triple))))
 
 (defn convert-to-dataset-graph
-  "Takes and EDN representation of a knowledge graph and converts it to a DataSetGraph."
+  "Takes and EDN representation of a knowledge graph and converts it to a DataSetGraph.
+  This format is chosen by default in order to quads/multiple graphs could be represented."
   [edn]
   (let [facts (::core/facts edn)
         context (::core/context edn)
@@ -65,36 +69,41 @@
         (.add dataset-graph quad))
       dataset-graph)))
 
-(defn write-dataset-graph
-  "Writes a dataset-graph."
-  [writeable]
-  (let [syntax (Lang/TURTLE)
+(defn write-dataset-graph-as
+  "Write a dataset graph in the specified language as a string."
+  [writable lang]
+  (let [syntax lang
         out (java.io.StringWriter.)]
-    (RDFDataMgr/write out writeable syntax)
+    (RDFDataMgr/write out writable syntax)
     (.toString out)))
+
+(defn write-dataset-graph
+  "Writes a dataset-graph to a TURTLE string."
+  [writable]
+  (write-dataset-graph-as writable Lang/TURTLE))
 
 (defn write-dataset-graph-quad
-  "Writes a dataset-graph."
-  [writeable]
-  (let [syntax (Lang/NQUADS)
-        out (java.io.StringWriter.)]
-    (RDFDataMgr/write out writeable syntax)
-    (.toString out)))
+  "Writes a dataset-graph to an NQUADS string."
+  [writable]
+  (write-dataset-graph-as writable Lang/NQUADS))
+
+(defn read-dataset-graph-as
+  "Reads a dataset from a given format string."
+  [dataset-string format]
+  (let [syntax format
+        in (java.io.StringReader. dataset-string)
+        dataset-graph (DatasetGraphFactory/create)]
+    (.parse (.lang (.source (RDFParser/create) in) syntax) dataset-graph)
+    dataset-graph))
 
 (defn read-dataset-graph
-  "Reads a dataset from a string."
+  "Reads a dataset from a TURTLE format string."
   [dataset-string]
-  (let [syntax (Lang/TURTLE)
-        in (java.io.StringReader. dataset-string)
-        dataset-graph (DatasetGraphFactory/create)]
-    (.parse (.lang (.source (RDFParser/create) in) syntax) dataset-graph)
-    dataset-graph))
+  (read-dataset-graph-as dataset-string Lang/TURTLE)
+  )
 
 (defn read-dataset-graph-quad
-  "Reads a dataset from a string."
+  "Reads a dataset from an NQUADS format string."
   [dataset-string]
-  (let [syntax (Lang/NQUADS)
-        in (java.io.StringReader. dataset-string)
-        dataset-graph (DatasetGraphFactory/create)]
-    (.parse (.lang (.source (RDFParser/create) in) syntax) dataset-graph)
-    dataset-graph))
+  (read-dataset-graph-as dataset-string Lang/NQUADS)
+)
