@@ -62,7 +62,7 @@
   <stork> foaf:name \"ooi\".
   <stork> foaf:age 13.
   <stork> <is-cunning> true.
-  <dinner1> <has-date> \"2002-05-30T09:00:00\"^^xsd:dateTime
+  <dinner1> <has-date> \"2002-05-30T18:00:00\"^^xsd:dateTime
   ")
 
 (def fox-and-stork-literals-edn
@@ -81,7 +81,7 @@
      [:stork :foaf/name "ooi"]
      [:stork :foaf/age 13]
      [:stork :is-cunning true]
-     [:dinner1 :has-date {:value "2002-05-30T09:00:00" :type :xsd/dateTime}]}})
+     [:dinner1 :has-date {:value "2002-05-30T18:00:00" :type :xsd/dateTime}]}})
 
 
 (def fox-and-stork-reif-edn

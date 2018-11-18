@@ -70,6 +70,10 @@
         (.add dataset-graph quad))
       dataset-graph)))
 
+;; (defn convert-dataset-graph-to-model [dataset-graph]
+;;   (ModelFactory/createModelForGraph (.getUnionGraph dataset-graph))
+;; )
+
 (defn write-dataset-graph
   "Write a dataset graph in the specified language as a string."
   [writable lang]
@@ -81,7 +85,12 @@
 (defn write-dataset-graph-turtle
   "Writes a dataset-graph to a TURTLE string."
   [writable]
-  (write-dataset-graph writable Lang/TURTLE))
+  (write-dataset-graph (.getUnionGraph writable) Lang/TURTLE))
+
+(defn write-dataset-graph-trig
+  "Writes a dataset-graph to a TRIG string."
+  [writable]
+  (write-dataset-graph writable Lang/TRIG))
 
 (defn write-dataset-graph-nquads
   "Writes a dataset-graph to an NQUADS string."
@@ -101,6 +110,11 @@
   "Reads a dataset from a TURTLE format string."
   [dataset-string]
   (read-dataset-graph dataset-string Lang/TURTLE))
+
+(defn read-dataset-graph-trig
+  "Reads a dataset from a TRIG format string."
+  [dataset-string]
+  (read-dataset-graph dataset-string Lang/TRIG))
 
 (defn read-dataset-graph-nquads
   "Reads a dataset from an NQUADS format string."
