@@ -90,8 +90,8 @@ In cases such as these use a converter that supports quads, to not lose such inf
 
 I have been writing a number of articles about the use of Clojure for creating Linked Data, that is interlinked with the creation of this library:
 
-[Part 1: General Introduction](https://www.newresalhaider.com/post/aesopica-1/)
-[Part 2: Datatypes](https://www.newresalhaider.com/post/aesopica-2/)
+1. [General Introduction](https://www.newresalhaider.com/post/aesopica-1/)
+2. [Datatypes](https://www.newresalhaider.com/post/aesopica-2/)
 
 ## License
 
