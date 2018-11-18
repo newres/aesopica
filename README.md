@@ -82,7 +82,8 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
 
 ### Conversion to common formats such as Turtle, N-Quads
 
-See the aesopica.converter and tests for examples.
+See the aesopica.converter and tests for examples. Note that certain formats, such as Turtle, are not designed with quads/named graphs in mind.
+In cases such as these use a converter that supports quads, to not lose such information.
 
 ## License
 
