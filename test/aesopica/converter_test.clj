@@ -131,6 +131,19 @@
     (is (= 0 (count (second diff-result))))
     (is (= 14 (count (last diff-result))))))
 
+(deftest convert-to-dataset-graph-fox-and-stork-blank-node-test
+  (let [dataset-graph (convert-to-dataset-graph fox-and-stork-blank-node-edn)]
+    (is (= 14 (count (iterator-seq (.find dataset-graph)))))))
+
+(deftest convert-to-dataset-graph-fox-and-stork-blank-node-comparison-test
+  (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-blank-node-edn)
+        dataset-graph2 (read-dataset-graph-turtle fox-and-stork-blank-node-turtle)
+        diff-result (diff dataset-graph1 dataset-graph2)]
+    ;; There should be this many differences due to normal blank node comparisons.
+    (is (= 8 (count (first diff-result))))
+    ;; But the string representation in pretty printed Turtle should remain the same.
+    (is (= (write-dataset-graph-turtle dataset-graph1) (write-dataset-graph-turtle dataset-graph2)))))
+
 (deftest edn-to-turtle-empty-translate-test
   (let [converted-dataset-graph (convert-to-dataset-graph {})]
     (is (= 0 (count (iterator-seq (.find  converted-dataset-graph)))))
@@ -140,4 +153,4 @@
   (testing "Wheter an EDN representation can be correctly translated to RDF.")
   (let [converted-dataset-graph (convert-to-dataset-graph fox-and-stork-edn)]
     (is (= 14 (count (iterator-seq (.find  converted-dataset-graph)))))
-    (is (string? (write-dataset-graph-nquads (convert-to-dataset-graph fox-and-stork-edn))))))
+    (is (string? (write-dataset-graph-trig (convert-to-dataset-graph fox-and-stork-edn))))))

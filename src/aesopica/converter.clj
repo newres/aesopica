@@ -8,9 +8,13 @@
    (org.apache.jena.rdf.model ResourceFactory)
    (org.apache.jena.rdf.model ModelFactory)
    (org.apache.jena.rdf.model Statement)
+   (org.apache.jena.rdf.model AnonId)
    (org.apache.jena.rdf.model.impl StatementImpl)
+   (org.apache.jena.rdf.model.impl ResourceImpl)
    (org.apache.jena.graph NodeFactory)
-   (org.apache.jena.sparql.core Quad) (org.apache.jena.sparql.core DatasetGraphFactory)
+   (org.apache.jena.sparql.core Quad)
+   (org.apache.jena.query DatasetFactory)
+   (org.apache.jena.sparql.core DatasetGraphFactory)
    (org.apache.jena.sparql.core.mem DatasetGraphInMemory)
    (org.apache.jena.datatypes BaseDatatype))
   (:require
@@ -38,13 +42,24 @@
 (defn convert-to-property [context kw]
   (ResourceFactory/createProperty (core/contextualize context kw)))
 
+(defn convert-to-blank-node [context symbol]
+  (new ResourceImpl (new AnonId (str symbol))))
+
+(defmulti convert-to-subject (fn [context element] (cond (s/valid? ::core/blank-node element) ::core/blank-node :else :default)))
+
+(defmethod convert-to-subject ::core/blank-node [context element]
+  (convert-to-blank-node context element))
+
+(defmethod convert-to-subject :default [context element]
+  (convert-to-resource context element))
+
 (defn convert-to-object [context element]
-  (if (keyword? element)
-    (convert-to-resource context element)
-    (convert-to-literal context element)))
+  (cond (keyword? element) (convert-to-resource context element)
+        (s/valid? ::core/blank-node element) (convert-to-blank-node context element)
+        :else (convert-to-literal context element)))
 
 (defn convert-to-statement [context triple]
-  (let [subject-resource (convert-to-resource context (nth triple 0))
+  (let [subject-resource (convert-to-subject context (nth triple 0))
         predicate-property (convert-to-property context (nth triple 1))
         object-resource (convert-to-object context (nth triple 2))]
     (ResourceFactory/createStatement subject-resource predicate-property object-resource)))
@@ -70,10 +85,6 @@
         (.add dataset-graph quad))
       dataset-graph)))
 
-;; (defn convert-dataset-graph-to-model [dataset-graph]
-;;   (ModelFactory/createModelForGraph (.getUnionGraph dataset-graph))
-;; )
-
 (defn write-dataset-graph
   "Write a dataset graph in the specified language as a string."
   [writable lang]
@@ -82,15 +93,19 @@
     (RDFDataMgr/write out writable syntax)
     (.toString out)))
 
-(defn write-dataset-graph-turtle
-  "Writes a dataset-graph to a TURTLE string."
-  [writable]
-  (write-dataset-graph (.getUnionGraph writable) Lang/TURTLE))
-
 (defn write-dataset-graph-trig
   "Writes a dataset-graph to a TRIG string."
   [writable]
-  (write-dataset-graph writable Lang/TRIG))
+  ;; There seems to be an issue with the default TriGWriter so a lower level function method is used.
+  (let [syntax Lang/TRIG
+        out (java.io.StringWriter.)]
+    (.write (new org.apache.jena.riot.writer.TriGWriterBlocks) out writable nil nil org.apache.jena.sparql.util.Context/emptyContext)
+    (.toString out)))
+
+(defn write-dataset-graph-turtle
+  "Writes a dataset-graph to a TURTLE string. Note that this format is not designed for named graphs/quads. In this implementation, we do a union of the default and named graphs, but this is lossy when there are named graphs/quads are present. For a loss-less format, use a format designed for named-graphs: such as N-Quads or TriG."
+  [writable]
+  (write-dataset-graph (new org.apache.jena.graph.compose.Union (.getDefaultGraph writable) (.getUnionGraph writable)) Lang/TURTLE))
 
 (defn write-dataset-graph-nquads
   "Writes a dataset-graph to an NQUADS string."
