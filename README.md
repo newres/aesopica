@@ -35,7 +35,7 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
 ```
 ## Features
 
-### String, integer long and custom Datatypes Supported
+### String, Integer, Long and Custom Datatypes Supported
 
 ```clojure
 (def fox-and-stork-literals-edn
@@ -81,10 +81,46 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
      [:stork :can-not-eat-food-served-using :shallow-plate]}})
 ```
 
-### Conversion to common formats such as Turtle, N-Quads
+### Blank Nodes 
 
-See the aesopica.converter and tests for examples. Note that certain formats, such as Turtle, are not designed with quads/named graphs in mind.
-In cases such as these use a converter that supports quads, to not lose such information.
+
+```clojure
+(def fox-and-stork-blank-node-edn
+  {::aes/context
+   {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
+    :rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
+   ::aes/facts
+   #{[:fox :rdf/type :animal]
+     [:stork :rdf/type :animal]
+     [:fox :gives-invitation 'invitation1]
+     ['invitation1 :has-invited :stork]
+     ['invitation1 :has-food :soup]
+     ['invitation1 :serves-using :shallow-plate]
+     [:stork :gives-invitation 'invitation2]
+     ['invitation2 :has-invited :fox]
+     ['invitation2 :has-food :crumbled-food]
+     ['invitation2 :serves-using :narrow-mouthed-jug]
+     [:fox :can-eat-food-served-using :shallow-plate]
+     [:fox :can-not-eat-food-served-using :narrow-mouthed-jug]
+     [:stork :can-eat-food-served-using :narrow-mouthed-jug]
+     [:stork :can-not-eat-food-served-using :shallow-plate]}})
+```
+
+### Conversion to common formats such as Turtle, Trig, N-Quads
+
+The conversion utilizes the [Apache Jena](https://jena.apache.org/) library for conversion. 
+First the Clojure EDN representation needs to be converted to a Jena DataSetGraph (a Jena representation of a set of graphs).
+Afterwards the Clojure wrapper functions that utilize Jena's RDF I/O technology (RIOT) can be called. 
+
+Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, a conversion to Turtle can be written as:
+
+```clojure
+(conv/write-dataset-graph-turtle (conv/convert-to-dataset-graph fox-and-stork-edn))
+```
+See the aesopica.converter namespace and related tests for more examples. 
+
+Note that certain formats, such as Turtle, are not designed with quads/named graphs in mind.
+In cases such as these, converter to a format that supports quads need to be used (e.g.: TriG, NQUADS) to not lose information.
 
 ## Design Decisions and Tutorial
 
