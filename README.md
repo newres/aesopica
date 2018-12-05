@@ -121,7 +121,7 @@ a conversion to Turtle can be written as:
 See the aesopica.converter namespace and related tests for more examples. 
 
 Note that certain formats, such as Turtle, are not designed with quads/named graphs in mind.
-In cases such as these, converter to a format that supports quads need to be used (e.g.: TriG, NQUADS) to not lose information.
+In cases such as these, a converter to a format that supports quads need to be used (e.g.: TriG, NQUADS) to not lose information.
 
 ## Design Decisions and Tutorial
 
