@@ -150,6 +150,14 @@
     (is (= 0 (count (second diff-result))))
     (is (= 12 (count (last diff-result))))))
 
+(deftest convert-to-dataset-graph-fox-and-stork-named-graph-json-ld-comparison-test
+  (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-named-graph-edn)
+        dataset-graph2 (read-dataset-graph-json-ld fox-and-stork-named-graph-json-ld)
+        diff-result (diff dataset-graph1 dataset-graph2)]
+    (is (= 0 (count (first diff-result))))
+    (is (= 0 (count (second diff-result))))
+    (is (= 12 (count (last diff-result))))))
+
 (deftest convert-to-dataset-graph-fox-and-stork-blank-node-test
   (let [dataset-graph (convert-to-dataset-graph fox-and-stork-blank-node-edn)]
     (is (= 14 (count (iterator-seq (.find dataset-graph)))))))
@@ -163,13 +171,14 @@
     ;; But the string representation in pretty printed Turtle should remain the same.
     (is (= (write-dataset-graph-turtle dataset-graph1) (write-dataset-graph-turtle dataset-graph2)))))
 
-(deftest edn-to-turtle-empty-translate-test
+(deftest edn-to-turtle-empty-conversion-test
   (let [converted-dataset-graph (convert-to-dataset-graph {})]
     (is (= 0 (count (iterator-seq (.find  converted-dataset-graph)))))
-    (is (= "" (write-dataset-graph-nquads converted-dataset-graph)))))
+    (is (= "" (write-dataset-graph-turtle converted-dataset-graph)))))
 
-(deftest edn-to-turtle-translate-test
-  (testing "Wheter an EDN representation can be correctly translated to RDF.")
-  (let [converted-dataset-graph (convert-to-dataset-graph fox-and-stork-edn)]
-    (is (= 14 (count (iterator-seq (.find  converted-dataset-graph)))))
-    (is (string? (write-dataset-graph-trig (convert-to-dataset-graph fox-and-stork-edn))))))
+(deftest edn-to-turtle-conversion-test
+  (testing "Wheter an EDN representation can be correctly converted to Turtle.")
+  (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-edn)]
+    (is (= 14 (count (iterator-seq (.find dataset-graph1)))))
+    (is (string? (write-dataset-graph-turtle dataset-graph1)))))
+

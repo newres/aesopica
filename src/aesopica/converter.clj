@@ -116,6 +116,11 @@
   [writable]
   (write-dataset-graph writable Lang/NQUADS))
 
+(defn write-dataset-graph-json-ld
+  "Writes a dataset-graph to an JSON-LD string."
+  [writable]
+  (write-dataset-graph writable Lang/JSONLD))
+
 (defn read-dataset-graph
   "Reads a dataset from a given format string."
   [dataset-string format]
@@ -139,3 +144,8 @@
   "Reads a dataset from an NQUADS format string."
   [dataset-string]
   (read-dataset-graph dataset-string Lang/NQUADS))
+
+(defn read-dataset-graph-json-ld
+  "Reads a dataset from an JSON-LD format string."
+  [dataset-string]
+  (read-dataset-graph dataset-string Lang/JSONLD))

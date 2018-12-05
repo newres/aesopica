@@ -106,13 +106,14 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
      [:stork :can-not-eat-food-served-using :shallow-plate]}})
 ```
 
-### Conversion to common formats such as Turtle, Trig, N-Quads
+### Conversion to common formats such as Turtle, Trig, N-Quads, JSON-LD
 
 The conversion utilizes the [Apache Jena](https://jena.apache.org/) library for conversion. 
 First the Clojure EDN representation needs to be converted to a Jena DataSetGraph (a Jena representation of a set of graphs).
 Afterwards the Clojure wrapper functions that utilize Jena's RDF I/O technology (RIOT) can be called. 
 
-Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, a conversion to Turtle can be written as:
+Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, and `conv` the shorthand for the conversion namespace,
+a conversion to Turtle can be written as:
 
 ```clojure
 (conv/write-dataset-graph-turtle (conv/convert-to-dataset-graph fox-and-stork-edn))
