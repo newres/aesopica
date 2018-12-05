@@ -67,8 +67,12 @@
 (defmulti convert-to-quad (fn [context fact] (cond (s/valid? ::core/quad fact) :quad :else :triple)))
 
 (defmethod convert-to-quad :quad [context quad]
-  (let [triple (.asTriple (convert-to-statement context (take 3 quad)))]
-    (new Quad (NodeFactory/createURI (core/contextualize context (last quad))) triple)))
+  (let [triple (.asTriple (convert-to-statement context (take 3 quad)))
+        graph (last quad)
+        graph-uri (cond (s/valid? ::core/blank-node graph)
+                        (NodeFactory/createBlankNode (str graph)) :else
+                        (NodeFactory/createURI (core/contextualize context graph)))]
+    (new Quad graph-uri triple)))
 
 (defmethod convert-to-quad :triple [context triple]
   (new Quad nil (.asTriple (convert-to-statement context triple))))

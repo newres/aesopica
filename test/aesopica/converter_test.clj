@@ -89,6 +89,14 @@
          "[http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1 http://www.newresalhaider.com/ontologies/aesop/foxstork/fox http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1]"
          (.toString (convert-to-quad context quad))))))
 
+(deftest convert-to-quad-blank-node-graph-test
+  (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
+        quad [:foxstork/fox :foxstork/gives-invitation :foxstork/invitation1 'dinner1]]
+    (is (=
+
+         "[dinner1 http://www.newresalhaider.com/ontologies/aesop/foxstork/fox http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1]"
+         (.toString (convert-to-quad context quad))))))
+
 (deftest convert-to-dataset-graph-empty-test
   (is (= true (.isEmpty  (convert-to-dataset-graph {})))))
 
@@ -130,6 +138,17 @@
     (is (= 0 (count (first diff-result))))
     (is (= 0 (count (second diff-result))))
     (is (= 14 (count (last diff-result))))))
+
+(deftest convert-to-dataset-graph-fox-and-stork-named-graph-test
+  (is (= 12 (count (iterator-seq (.find  (convert-to-dataset-graph fox-and-stork-named-graph-edn)))))))
+
+(deftest convert-to-dataset-graph-fox-and-stork-named-graph-comparison-test
+  (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-named-graph-edn)
+        dataset-graph2 (read-dataset-graph-trig fox-and-stork-named-graph-trig)
+        diff-result (diff dataset-graph1 dataset-graph2)]
+    (is (= 0 (count (first diff-result))))
+    (is (= 0 (count (second diff-result))))
+    (is (= 12 (count (last diff-result))))))
 
 (deftest convert-to-dataset-graph-fox-and-stork-blank-node-test
   (let [dataset-graph (convert-to-dataset-graph fox-and-stork-blank-node-edn)]

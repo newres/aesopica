@@ -44,6 +44,10 @@
   (let [kg fox-and-stork-blank-node-edn]
     (is (s/valid? ::aes/knowledge-graph kg))))
 
+(deftest valid-kb-fox-stork-blank-node-reif-test
+  (let [kg fox-and-stork-blank-node-reif-edn]
+    (is (s/valid? ::aes/knowledge-graph kg))))
+
 (deftest contextualize-base-test
   (let [context {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
         kw :fox]
