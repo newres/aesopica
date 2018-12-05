@@ -1,6 +1,8 @@
 (ns aesopica.core
   (:require [clojure.spec.alpha :as s]))
 
+(s/def ::value string?)
+(s/def ::type keyword?)
 (s/def ::context (s/map-of (s/or :keyword keyword? :nil nil?) string?))
 (s/def ::custom-literal (s/keys :req-un [::value ::type]))
 (s/def ::blank-node symbol?)
@@ -11,7 +13,7 @@
 (s/def ::quad (s/cat :subject ::subject :predicate keyword? :object ::object :graph ::graph))
 (s/def ::fact (s/or :triple ::triple :quad ::quad))
 (s/def ::facts (s/coll-of ::fact :kind set?))
-(s/def ::knowledge-graph (s/keys :req [::context ::facts]))
+(s/def ::knowledge-base (s/keys :req [::context ::facts]))
 
 (defn contextualize [context kw]
   "Given a context and a keyword, it creates a namespaced version of the keyword that is appropriate given the context."

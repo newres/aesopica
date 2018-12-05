@@ -17,8 +17,8 @@
     (is (s/valid? ::aes/facts facts))))
 
 (deftest valid-kb-fox-stork-test
-  (let [kg fox-and-stork-edn]
-    (is (s/valid? ::aes/knowledge-graph kg))))
+  (let [kb fox-and-stork-edn]
+    (is (s/valid? ::aes/knowledge-base kb))))
 
 (deftest valid-context-fox-stork-literals-test
   (let [context (::aes/context fox-and-stork-literals-edn)]
@@ -29,24 +29,24 @@
     (is (s/valid? ::aes/facts facts))))
 
 (deftest valid-kb-fox-stork-literals-test
-  (let [kg fox-and-stork-literals-edn]
-    (is (s/valid? ::aes/knowledge-graph kg))))
+  (let [kb fox-and-stork-literals-edn]
+    (is (s/valid? ::aes/knowledge-base kb))))
 
 (deftest valid-facts-fox-stork-reif-test
   (let [facts (::aes/facts fox-and-stork-reif-edn)]
     (is (s/valid? ::aes/facts facts))))
 
 (deftest valid-kb-fox-stork-reif-test
-  (let [kg fox-and-stork-reif-edn]
-    (is (s/valid? ::aes/knowledge-graph kg))))
+  (let [kb fox-and-stork-reif-edn]
+    (is (s/valid? ::aes/knowledge-base kb))))
 
 (deftest valid-kb-fox-stork-blank-node-test
-  (let [kg fox-and-stork-blank-node-edn]
-    (is (s/valid? ::aes/knowledge-graph kg))))
+  (let [kb fox-and-stork-blank-node-edn]
+    (is (s/valid? ::aes/knowledge-base kb))))
 
 (deftest valid-kb-fox-stork-blank-node-reif-test
-  (let [kg fox-and-stork-blank-node-reif-edn]
-    (is (s/valid? ::aes/knowledge-graph kg))))
+  (let [kb fox-and-stork-blank-node-reif-edn]
+    (is (s/valid? ::aes/knowledge-base kb))))
 
 (deftest contextualize-base-test
   (let [context {nil "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
