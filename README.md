@@ -35,7 +35,7 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
 ```
 ## Features
 
-### String, Integer, Long and Custom Datatypes Supported
+### String, Integer, Boolean, Long and Custom Datatypes
 
 ```clojure
 (def fox-and-stork-literals-edn
@@ -109,16 +109,15 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
 ### Conversion to common formats such as Turtle, Trig, N-Quads, JSON-LD
 
 The conversion utilizes the [Apache Jena](https://jena.apache.org/) library for conversion. 
-First the Clojure EDN representation needs to be converted to a Jena DataSetGraph (a Jena representation of a set of graphs).
-Afterwards the Clojure wrapper functions that utilize Jena's RDF I/O technology (RIOT) can be called. 
+First the Clojure EDN representation needs to be converted to a [Jena DataSetGraph](http://jena.apache.org/documentation/javadoc/arq/org/apache/jena/sparql/core/DatasetGraph.html) (a Jena representation of a set of graphs).
+Afterwards the Clojure functions that utilize and wrap Jena's [RDF I/O technology (RIOT)](https://jena.apache.org/documentation/io/) can be called. 
 
-Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, and `conv` the shorthand for the conversion namespace,
-a conversion to Turtle can be written as:
+Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, and `conv` the shorthand for the `aesopica.converter` namespace, a conversion to Turtle can be written as:
 
 ```clojure
 (conv/write-dataset-graph-turtle (conv/convert-to-dataset-graph fox-and-stork-edn))
 ```
-See the aesopica.converter namespace and related tests for more examples. 
+See the `aesopica.converter` namespace and related tests for more examples. 
 
 Note that certain formats, such as Turtle, are not designed with quads/named graphs in mind.
 In cases such as these, a converter to a format that supports quads need to be used (e.g.: TriG, NQUADS) to not lose information.
