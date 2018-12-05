@@ -8,11 +8,11 @@
 
 (deftest convert-to-resource-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
-        kw :foxstork/fox]
+        kb :foxstork/fox]
     (is (=
 
-         (str (contextualize context kw))
-         (.getURI (convert-to-resource context kw))))))
+         (str (contextualize context kb))
+         (.getURI (convert-to-resource context kb))))))
 
 (deftest convert-to-literal-string-test
   (let [string "a string"
