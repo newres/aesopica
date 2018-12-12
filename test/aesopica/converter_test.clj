@@ -150,6 +150,14 @@
     (is (= 0 (count (second diff-result))))
     (is (= 12 (count (last diff-result))))))
 
+(deftest convert-to-dataset-graph-fox-and-stork-named-graph-nquads-comparison-test
+  (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-named-graph-edn)
+        dataset-graph2 (read-dataset-graph-nquads fox-and-stork-named-graph-nquads)
+        diff-result (diff dataset-graph1 dataset-graph2)]
+    (is (= 0 (count (first diff-result))))
+    (is (= 0 (count (second diff-result))))
+    (is (= 12 (count (last diff-result))))))
+
 (deftest convert-to-dataset-graph-fox-and-stork-named-graph-json-ld-comparison-test
   (let [dataset-graph1 (convert-to-dataset-graph fox-and-stork-named-graph-edn)
         dataset-graph2 (read-dataset-graph-json-ld fox-and-stork-named-graph-json-ld)

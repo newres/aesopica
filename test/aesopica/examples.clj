@@ -168,6 +168,22 @@
             <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-invited>  <http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> .
 }")
 
+(def fox-and-stork-named-graph-nquads
+  "
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.newresalhaider.com/ontologies/aesop/foxstork/animal> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> <http://www.w3.org/2006/time#before> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.newresalhaider.com/ontologies/aesop/foxstork/animal> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/serves-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/narrow-mouthed-jug> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/crumbled-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-invited> <http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation> <http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation2> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/serves-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/narrow-mouthed-jug> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner2> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/fox> <http://www.newresalhaider.com/ontologies/aesop/foxstork/gives-invitation> <http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-food> <http://www.newresalhaider.com/ontologies/aesop/foxstork/soup> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/serves-using> <http://www.newresalhaider.com/ontologies/aesop/foxstork/shallow-plate> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+<http://www.newresalhaider.com/ontologies/aesop/foxstork/invitation1> <http://www.newresalhaider.com/ontologies/aesop/foxstork/has-invited> <http://www.newresalhaider.com/ontologies/aesop/foxstork/stork> <http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner1> .
+")
+
 (def fox-and-stork-named-graph-json-ld
   "{
   \"@graph\" : [ {
