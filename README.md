@@ -31,7 +31,7 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
      [:stork :can-eat-food-served-using :narrow-mouthed-jug]
      [:stork :can-not-eat-food-served-using :shallow-plate]}})
   
-(conv/write-dataset-graph-turtle (conv/convert-to-dataset-graph fox-and-stork-edn))
+(conv/convert-to-turtle fox-and-stork-edn)
 ```
 ## Features
 
@@ -115,7 +115,7 @@ Afterwards the Clojure functions that utilize and wrap Jena's [RDF I/O technolog
 Assuming `fox-and-stork-edn` is a Clojure EDN representation of RDF, and `conv` the shorthand for the `aesopica.converter` namespace, a conversion to Turtle can be written as:
 
 ```clojure
-(conv/write-dataset-graph-turtle (conv/convert-to-dataset-graph fox-and-stork-edn))
+(conv/convert-to-turtle fox-and-stork-edn)
 ```
 See the `aesopica.converter` namespace and related tests for more examples. 
 
