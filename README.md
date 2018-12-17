@@ -54,7 +54,7 @@ It allows the user to create Linked Data using idiomatic Clojure datastructures,
      [:stork :foaf/name "ooi"]
      [:stork :foaf/age 13]
      [:stork :is-cunning true]
-     [:dinner1 :has-date {:value "2002-05-30T18:00:00" :type :xsd/dateTime}]}})
+     [:dinner1 :has-date {::aes/value "2002-05-30T18:00:00" ::aes/type :xsd/dateTime}]}})
 ```
 ### Quads/Named Graphs
 

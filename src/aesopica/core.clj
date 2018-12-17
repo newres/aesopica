@@ -4,7 +4,7 @@
 (s/def ::value string?)
 (s/def ::type keyword?)
 (s/def ::context (s/map-of (s/or :keyword keyword? :nil nil?) string?))
-(s/def ::custom-literal (s/keys :req-un [::value ::type]))
+(s/def ::custom-literal (s/keys :req [::value ::type]))
 (s/def ::blank-node symbol?)
 (s/def ::subject (s/or :keyword keyword? :blank-node ::blank-node))
 (s/def ::object (s/or :keyword keyword? :string string? :number number? :boolean boolean? :blank-node ::blank-node :custom-literal ::custom-literal))

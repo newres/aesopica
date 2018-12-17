@@ -28,10 +28,10 @@
 (defmulti convert-to-literal (fn [context literal] (cond (map? literal) :custom-type :else :default)))
 
 (defmethod convert-to-literal :custom-type [context literal-map]
-  (ResourceFactory/createTypedLiteral (:value literal-map) (new BaseDatatype (core/contextualize context (:type literal-map)))))
+  (ResourceFactory/createTypedLiteral (::core/value literal-map) (new BaseDatatype (core/contextualize context (::core/type literal-map)))))
 
 (defmethod convert-to-literal :custom-type [context literal-map]
-  (ResourceFactory/createTypedLiteral (:value literal-map) (new BaseDatatype (core/contextualize context (:type literal-map)))))
+  (ResourceFactory/createTypedLiteral (::core/value literal-map) (new BaseDatatype (core/contextualize context (::core/type literal-map)))))
 
 (defmethod convert-to-literal :default [context literal]
   (ResourceFactory/createTypedLiteral literal))

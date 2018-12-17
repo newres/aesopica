@@ -73,7 +73,7 @@
 (deftest convert-to-statement-custom-datatype-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"
                  :xsd "http://www.w3.org/2001/XMLSchema#"}
-        triple [:foxstork/dinner :foxstork/planned-on-date {:value "2002-09-24" :type :xsd/date}]]
+        triple [:foxstork/dinner :foxstork/planned-on-date {::aes/value "2002-09-24" ::aes/type :xsd/date}]]
     (is (= "[http://www.newresalhaider.com/ontologies/aesop/foxstork/dinner, http://www.newresalhaider.com/ontologies/aesop/foxstork/planned-on-date, \"2002-09-24\"^^http://www.w3.org/2001/XMLSchema#date]" (.toString (convert-to-statement context triple))))))
 
 (deftest convert-to-quad-triple-test
