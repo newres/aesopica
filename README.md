@@ -128,6 +128,7 @@ I have been writing a number of articles about the use of Clojure for creating L
 
 1. [General Introduction](https://www.newresalhaider.com/post/aesopica-1/)
 2. [Datatypes](https://www.newresalhaider.com/post/aesopica-2/)
+2. [Named Graphs](https://www.newresalhaider.com/post/aesopica-3/)
 
 ## License
 
