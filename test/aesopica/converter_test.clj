@@ -190,3 +190,32 @@
     (is (= 14 (count (iterator-seq (.find dataset-graph1)))))
     (is (string? (write-dataset-graph-turtle dataset-graph1)))))
 
+(deftest convert-to-turtle-test
+  (let [edn fox-and-stork-edn
+        result (convert-to-turtle edn)]
+    (is (string? result))
+    (is (not= "" result))))
+
+(deftest convert-to-trig-test
+  (let [edn fox-and-stork-edn
+        result (convert-to-trig edn)]
+    (is (string? result))
+    (is (not= "" result))))
+
+(deftest convert-to-trig-named-graph-test
+  (let [edn fox-and-stork-edn
+        result (convert-to-trig edn)]
+    (is (string? result))
+    (is (not= "" result))))
+
+(deftest convert-to-nquads-named-graph-test
+  (let [edn fox-and-stork-named-graph-edn
+        result (convert-to-nquads edn)]
+    (is (string? result))
+    (is (not= "" result))))
+
+(deftest convert-to-json-ld-named-graph-test
+  (let [edn fox-and-stork-named-graph-edn
+        result (convert-to-json-ld edn)]
+    (is (string? result))
+    (is (not= "" result))))

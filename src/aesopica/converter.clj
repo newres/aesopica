@@ -107,7 +107,8 @@
     (.toString out)))
 
 (defn write-dataset-graph-turtle
-  "Writes a dataset-graph to a TURTLE string. Note that this format is not designed for named graphs/quads. In this implementation, we do a union of the default and named graphs, but this is lossy when there are named graphs/quads are present. For a loss-less format, use a format designed for named-graphs: such as N-Quads or TriG."
+  "Writes a dataset-graph to a TURTLE string.
+  Note that this format is not designed for named graphs/quads. In this implementation, we do a union of the default and named graphs, but this is lossy when there are named graphs/quads are present. For a loss-less format, use a format designed for named-graphs: such as N-Quads or TriG."
   [writable]
   (write-dataset-graph (new org.apache.jena.graph.compose.Union (.getDefaultGraph writable) (.getUnionGraph writable)) Lang/TURTLE))
 
@@ -149,3 +150,24 @@
   "Reads a dataset from an JSON-LD format string."
   [dataset-string]
   (read-dataset-graph dataset-string Lang/JSONLD))
+
+(defn convert-to-turtle
+  "Takes and EDN representation of a knowledge graph and converts it to a Turtle string representation.
+  Note that this format is not designed for named graphs/quads. In this implementation, we do a union of the default and named graphs, but this is lossy when there are named graphs/quads are present. For a loss-less format, use a format designed for named-graphs: such as N-Quads or TriG."
+  [edn]
+  (write-dataset-graph-turtle (convert-to-dataset-graph edn)))
+
+(defn convert-to-trig
+  "Takes and EDN representation of a knowledge graph and converts it to a TriG string representation."
+  [edn]
+  (write-dataset-graph-trig (convert-to-dataset-graph edn)))
+
+(defn convert-to-nquads
+  "Takes and EDN representation of a knowledge graph and converts it to an NQUADS string representation."
+  [edn]
+  (write-dataset-graph-nquads (convert-to-dataset-graph edn)))
+
+(defn convert-to-json-ld
+  "Takes and EDN representation of a knowledge graph and converts it to an JSON-LD string representation."
+  [edn]
+  (write-dataset-graph-json-ld (convert-to-dataset-graph edn)))
