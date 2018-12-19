@@ -1,4 +1,4 @@
-# aesopica
+# Aesopica
 
 A Clojure library designed to help create Semantic Web, and in particular Linked Data/RDF based applications. 
 It allows the user to create Linked Data using idiomatic Clojure datastructures, and translate them to various RDF formats.
