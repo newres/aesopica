@@ -1,22 +1,22 @@
 (ns aesopica.converter
   (:import
-   (org.apache.jena.riot Lang)
-   (org.apache.jena.riot RDFDataMgr)
-   (org.apache.jena.riot RDFParser)
-   (org.apache.jena.riot RDFParserBuilder)
-   (org.apache.jena.rdf.model)
-   (org.apache.jena.rdf.model ResourceFactory)
-   (org.apache.jena.rdf.model ModelFactory)
-   (org.apache.jena.rdf.model Statement)
-   (org.apache.jena.rdf.model AnonId)
-   (org.apache.jena.rdf.model.impl StatementImpl)
-   (org.apache.jena.rdf.model.impl ResourceImpl)
-   (org.apache.jena.graph NodeFactory)
-   (org.apache.jena.sparql.core Quad)
-   (org.apache.jena.query DatasetFactory)
-   (org.apache.jena.sparql.core DatasetGraphFactory)
-   (org.apache.jena.sparql.core.mem DatasetGraphInMemory)
-   (org.apache.jena.datatypes BaseDatatype))
+   [org.apache.jena.riot Lang]
+   [org.apache.jena.riot RDFDataMgr]
+   [org.apache.jena.riot RDFParser]
+   [org.apache.jena.riot RDFParserBuilder]
+   [org.apache.jena.rdf.model ResourceFactory]
+   [org.apache.jena.rdf.model ModelFactory]
+   [org.apache.jena.rdf.model Statement]
+   [org.apache.jena.rdf.model AnonId]
+   [org.apache.jena.rdf.model.impl StatementImpl]
+   [org.apache.jena.rdf.model.impl ResourceImpl]
+   [org.apache.jena.graph NodeFactory]
+   [org.apache.jena.sparql.core Quad]
+   [org.apache.jena.query DatasetFactory]
+   [org.apache.jena.sparql.core DatasetGraphFactory]
+   [org.apache.jena.sparql.core.mem DatasetGraphInMemory]
+   [org.apache.jena.datatypes BaseDatatype]
+   )
   (:require
    [aesopica.core :as core]
    [clojure.spec.alpha :as s]))
