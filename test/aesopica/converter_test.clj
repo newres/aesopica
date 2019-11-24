@@ -4,7 +4,8 @@
             [aesopica.converter :as conv :refer :all]
             [clojure.spec.alpha :as s]
             [aesopica.examples :refer :all]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clojure.data :as data]))
 
 (deftest convert-to-resource-test
   (let [context {:foxstork "http://www.newresalhaider.com/ontologies/aesop/foxstork/"}
@@ -106,7 +107,7 @@
 (defn diff [dataset-graph1 dataset-graph2]
   (let [dataset-graph1-set (set (clojure.string/split (write-dataset-graph-nquads dataset-graph1) #"\n"))
         dataset-graph2-set (set (clojure.string/split (write-dataset-graph-nquads dataset-graph2) #"\n"))
-        diff (clojure.data/diff dataset-graph1-set dataset-graph2-set)]
+        diff (data/diff dataset-graph1-set dataset-graph2-set)]
     diff))
 
 (deftest convert-to-dataset-graph-fox-and-stork-comparison-test
